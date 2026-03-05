@@ -88,7 +88,7 @@ npm run dev
 npm start
 ```
 
-Server will be running at: `http://localhost:3000`
+Server will be running at: `http://localhost:5000`
 
 ---
 
