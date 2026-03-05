@@ -2,26 +2,24 @@ import mongoose from "mongoose";
 
 const bookSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
-      required: [true, "Book name is required"],
-      trim: true,
+      required: true,
     },
     author: {
       type: String,
-      required: [true, "Author name is required"],
-      trim: true,
     },
-    publishDate: {
+    description: {
       type: String,
-      trim: true,
     },
     price: {
       type: Number,
-      min: [0, "Price cannot be negative"],
+    },
+    coverImage: {
+      type: String,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const Book = mongoose.model("Book", bookSchema);

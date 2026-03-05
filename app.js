@@ -1,43 +1,56 @@
 import express from "express";
+import dotenv from "dotenv";
+
 import HttpError from "./middleware/HttpError.js";
 import bookRoutes from "./routes/bookRoutes.js";
-import connectDB from "./db/db.js";
+import connectDb from "./config/db.js";
+
+dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 5000;
+
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.use("/books", bookRoutes);
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Welcome to the Bookstore Management API" });
-});
+app.get("/",(req,res)=>{
+  res.status(200).json({message:"hello form server"})
+})
+
 
 app.use((req, res, next) => {
-  next(new HttpError("Route Not Found", 404));
+  next(new HttpError("Route not found", 404));
 });
 
-// Global error handler
+
 app.use((error, req, res, next) => {
-  if (res.headersSent) {
-    return next(error);
-  }
-  res
-    .status(error.statusCode || 500)
-    .json({ message: error.message || "Server Error" });
+  res.status(error.statusCode || 500).json({
+    message: error.message || "Internal Server Error",
+  });
 });
 
-const port = process.env.PORT || 5000;
-
-async function serverStart() {
+const startServer = async () => {
   try {
-    await connectDB();
+    const connect = await connectDb();
+
+    if (!connect) {
+      throw new Error("Failed to connect to the database");
+    }
+
+    console.log("✅ Database connected");
+
     app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      console.log(`🚀 Server running at http://localhost:${port}`);
     });
+
   } catch (error) {
-    console.log(error.message);
+    console.error("❌ Error:", error.message);
     process.exit(1);
   }
-}
+};
 
-serverStart();
+startServer(); 
