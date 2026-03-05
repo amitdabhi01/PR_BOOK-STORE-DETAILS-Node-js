@@ -74,7 +74,7 @@ cp .env.example .env
 Edit the `.env` file with your values:
 
 ```env
-PORT=3000
+PORT=5000
 MONGO_URI=mongodb://localhost:27017/bookstore
 ```
 
